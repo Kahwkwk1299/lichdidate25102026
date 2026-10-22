@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn option đi chơi ✨</title>
+    <style>
+        :root {
+            --primary: #ff758c;
+            --secondary: #ff7eb3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 0.3px; /* Tăng khoảng cách giữa các chữ nhẹ nhàng */
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ----- Hiệu ứng trái tim bay ----- */
+        .heart {
+            position: absolute;
+            font-size: 1.2rem;
+            color: rgba(255, 117, 140, 0.7);
+            user-select: none;
+            pointer-events: none;
+            animation: moveHeart 4s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes moveHeart {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Khung nội dung trắng mờ glassmorphism */
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 35px 22px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(255, 117, 140, 0.25);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #ff4757;
+            font-size: 1.45rem;
+            margin-bottom: 18px;
+            line-height: 1.5; /* Giãn dòng rộng rãi dễ đọc */
+            font-weight: 700;
+        }
+
+        p {
+            color: #555;
+            font-size: 0.98rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+
+        /* Khung ảnh nhỏ của cô ấy ở trang 1 */
+        .avatar-container {
+            margin-bottom: 20px;
+        }
+
+        .avatar-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ff758c;
+            box-shadow: 0 6px 18px rgba(255, 117, 140, 0.35);
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .btn-option {
+            background: #fff;
+            border: 2px solid #ff758c;
+            color: #ff758c;
+            padding: 13px 15px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            padding-left: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-option.selected {
+            background: #ff758c;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 117, 140, 0.4);
+        }
+
+        .btn-next {
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            color: white;
+            border: none;
+            padding: 13px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            box-shadow: 0 4px 15px rgba(255, 117, 140, 0.4);
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            position: relative;
+            min-height: 55px;
+            margin-top: 25px;
+        }
+
+        #btn-no {
+            position: absolute;
+            background: #a4b0be;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.08s ease;
+            letter-spacing: 0.3px;
+        }
+
+        #btn-yes {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        input[type="date"], input[type="time"], input[type="text"] {
+            width: 100%;
+            padding: 13px 15px;
+            border: 2px solid #ff758c;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 1rem;
+            outline: none;
+            background: #fff;
+        }
+
+        .flower-gif {
+            width: 170px;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 18px;
+            margin: 15px 0;
+            box-shadow: 0 5px 18px rgba(255, 117, 140, 0.25);
+        }
+
+        .success-box {
+            background: #fff5f7;
+            border: 1.5px dashed #ff758c;
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 18px;
+            text-align: left;
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Trang 1: Chào hỏi & Nút troll -->
+    <div class="step active" id="step-1">
+        <div class="avatar-container">
+            <!-- Ưu tiên dùng girlfriend.jpg, nếu không tìm thấy sẽ hiện ảnh GIF dễ thương -->
+            <img src="girlfriend.jpg" alt="Ảnh của chị" class="avatar-img" onerror="this.src='https://media1.tenor.com/m/Z618V39x31AAAAAC/cute-bear.gif'">
+        </div>
+        <h1>Chị có muốn đi chơi với em không? 🥰</h1>
+        <p>Chọn một nút bên dưới để trả lời thật lòng nha!</p>
+        <div class="btn-group">
+            <button id="btn-yes" onclick="nextStep(2)">Có chứ! ❤️</button>
+            <button id="btn-no" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton()">Không đâu 🙈</button>
+        </div>
+    </div>
+
+    <!-- Trang 2: Chọn địa điểm / Hoạt động -->
+    <div class="step" id="step-2">
+        <h1>Chị muốn đi đâu? ✨</h1>
+        <p>Lựa chọn hoạt động mà chị thích nhất nhé:</p>
+        <div class="options">
+            <button class="btn-option" onclick="selectOption(this, 'Xem phim')">🎬 Xem phim rạp</button>
+            <button class="btn-option" onclick="selectOption(this, 'Đi ăn ngon')">🍽️ Đi ăn uống</button>
+            <button class="btn-option" onclick="selectOption(this, 'Làm workshop')">🎨 Làm workshop sáng tạo</button>
+            <button class="btn-option" onclick="selectOption(this, 'Đi công viên')">🌳 Đi công viên hóng gió</button>
+        </div>
+        <input type="text" id="custom-activity" placeholder="Hoặc chị đề xuất chỗ khác nhé... ✍️" oninput="selectCustomOption(this)">
+        <button class="btn-next" onclick="validateStep2()">Tiếp tục ➔</button>
+    </div>
+
+    <!-- Trang 3: Chọn ngày giờ -->
+    <div class="step" id="step-3">
+        <h1>Chọn lịch hẹn giờ giấc nha ⏰</h1>
+        <p>Chọn ngày và khung giờ phù hợp với chị:</p>
+        <label style="text-align: left; display: block; font-size: 0.88rem; color: #777; margin-bottom: 6px;">Chọn ngày:</label>
+        <input type="date" id="date-input">
+        
+        <label style="text-align: left; display: block; font-size: 0.88rem; color: #777; margin-bottom: 6px;">Chọn khung giờ:</label>
+        <input type="time" id="time-input" value="18:00">
+        
+        <button class="btn-next" onclick="finishPlanner()">Chốt lịch hẹn! 🎉</button>
+    </div>
+
+    <!-- Trang 4: Thông báo hoàn tất & Tặng hoa -->
+    <div class="step" id="step-4">
+        <h1>Em đã tiếp nhận thông tin, em chờ chị nhé 💐🌹🌼🌸</h1>
+        <p>Nhân tiện thì tặng chị bông hoa  này nè:</p>
+        <!-- Link ảnh GIF hoa chuẩn từ Tenor không bị lỗi -->
+        <img src="https://media1.tenor.com/m/I8oO1y1_R4kAAAAC/flower-flower-for-you.gif" alt="Bông hoa tặng chị" class="flower-gif">
+        
+        <div class="success-box" id="summary-text">
+            Đang ghi nhận lịch hẹn... 🔄
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tạo hiệu ứng trái tim bay lơ lửng
+    function createHearts() {
+        const heartsContainer = document.body;
+        const heartIcons = ['💖', '💗', '🌸', '💕', '✨'];
+        
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.fontSize = Math.random() * 10 + 15 + 'px';
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }, 400);
+    }
+    createHearts();
+
+    let selection = {
+        activity: '',
+        date: '',
+        time: ''
+    };
+
+    // Nút từ chối chạy trốn
+    function moveButton() {
+        const btnNo = document.getElementById('btn-no');
+        const x = (Math.random() - 0.5) * 180;
+        const y = (Math.random() - 0.5) * 120;
+        btnNo.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function nextStep(stepNum) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById(`step-${stepNum}`).classList.add('active');
+    }
+
+    function selectOption(element, value) {
+        document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('selected'));
+        element.classList.add('selected');
+        selection.activity = value;
+        document.getElementById('custom-activity').value = '';
+    }
+
+    function selectCustomOption(input) {
+        document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('selected'));
+        if(input.value.trim() !== '') {
+            selection.activity = input.value;
+        }
+    }
+
+    function validateStep2() {
+        if (!selection.activity) {
+            alert('Chị hãy chọn một option hoặc tự đề xuất giúp em nhé ạ! ❤️');
+            return;
+        }
+        nextStep(3);
+    }
+
+    function finishPlanner() {
+        const dateVal = document.getElementById('date-input').value;
+        const timeVal = document.getElementById('time-input').value;
+
+        selection.date = dateVal ? dateVal : 'Cuối tuần này';
+        selection.time = timeVal ? timeVal : '18:00';
+
+        document.getElementById('summary-text').innerHTML = `
+            <b>📋 Lịch hẹn đã chốt:</b><br>
+            ✨ <b>Hoạt động:</b> ${selection.activity}<br>
+            📅 <b>Ngày:</b> ${selection.date}<br>
+            ⏰ <b>Giờ:</b> ${selection.time}
+        `;
+
+        nextStep(4);
+        sendDataToTelegram();
+    }
+
+    function sendDataToTelegram() {
+        const telegramBotToken = '8955243352:AAHWEy0u6MCFnO2vdZxp5gejxDoec8XKM2Q';
+        const chatId = '6333082873';
+
+        const message = `🚨 CÓ TIN VUI TỪ NGƯỜI ẤY! 🚨\n\n` +
+                        `🎯 Hoạt động: ${selection.activity}\n` +
+                        `📅 Ngày chọn: ${selection.date}\n` +
+                        `⏰ Giờ hẹn: ${selection.time}\n\n` +
+                        `💖 Chuẩn bị dresscode thuii!`;
+
+        fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message
+            })
+        }).catch(err => console.log('Lỗi gửi Telegram:', err));
+    }
+</script>
+</body>
+</html>
